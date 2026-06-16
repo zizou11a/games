@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Blitz — Daily Challenge — Playx</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b14;--surf:#0f1420;--surf2:#161d2e;--border:#1e2a40;
+  --blue:#3b82f6;--orange:#f97316;--green:#10b981;--yellow:#eab308;--red:#ef4444;
+  --text:#94a3b8;--bright:#e2e8f0;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(8,11,20,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.nav-logo span{color:var(--orange);-webkit-text-fill-color:var(--orange)}
+.nav-center{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--bright)}
+.nav-center span{color:var(--orange)}
+.nav-back{font-size:13px;color:var(--text);cursor:pointer;padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:all .2s;text-decoration:none}
+.nav-back:hover{border-color:var(--orange);color:var(--orange)}
+
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:24px 16px 40px;gap:20px;max-width:500px;margin:0 auto;width:100%}
+
+/* Header */
+.game-header{width:100%;text-align:center}
+.daily-badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.25);padding:5px 14px;border-radius:40px;margin-bottom:12px}
+.fire{animation:flicker 1.2s infinite alternate;display:inline-block}
+@keyframes flicker{0%{transform:rotate(-3deg) scale(1)}100%{transform:rotate(3deg) scale(1.1)}}
+.game-num{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--bright);margin-bottom:4px}
+.game-sub{font-size:13px;color:var(--text)}
+
+/* Timer & stats */
+.top-bar{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:12px 20px}
+.tbar-item{text-align:center}
+.tbar-num{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--bright)}
+.tbar-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin-top:2px}
+.tbar-divider{width:1px;height:32px;background:var(--border)}
+#timer-num{color:var(--orange)}
+
+/* Toast */
+.toast{
+  position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);
+  background:var(--bright);color:#080b14;
+  padding:10px 20px;border-radius:8px;font-weight:700;font-size:14px;
+  opacity:0;pointer-events:none;transition:all .2s;z-index:999;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Grid */
+.grid{display:flex;flex-direction:column;gap:6px;width:100%}
+.grid-row{display:flex;gap:6px;justify-content:center}
+.tile{
+  width:58px;height:58px;border:2px solid var(--border);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--bright);
+  text-transform:uppercase;transition:all .15s;position:relative;
+  background:var(--surf);user-select:none;
+}
+.tile.filled{border-color:#4a5568;animation:pop .1s ease}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+.tile.correct{background:var(--green);border-color:var(--green);color:#fff;animation:flip .5s ease forwards}
+.tile.present{background:var(--yellow);border-color:var(--yellow);color:#fff;animation:flip .5s ease forwards}
+.tile.absent{background:#374151;border-color:#374151;color:#9ca3af;animation:flip .5s ease forwards}
+.tile.shake{animation:shake .4s ease}
+@keyframes flip{0%{transform:rotateX(0)}50%{transform:rotateX(-90deg)}100%{transform:rotateX(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+
+/* Keyboard */
+.keyboard{width:100%;display:flex;flex-direction:column;gap:6px}
+.kb-row{display:flex;justify-content:center;gap:5px}
+.key{
+  height:52px;min-width:36px;padding:0 8px;border-radius:7px;
+  border:none;background:var(--surf2);color:var(--bright);
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;
+  flex:1;max-width:42px;text-transform:uppercase;
+}
+.key:hover{background:#2d3748;transform:translateY(-1px)}
+.key.wide{max-width:64px;font-size:11px;letter-spacing:0.5px}
+.key.correct{background:var(--green);color:#fff}
+.key.present{background:var(--yellow);color:#fff}
+.key.absent{background:#1f2937;color:#4b5563}
+
+/* Result panel */
+.result-panel{
+  width:100%;background:var(--surf);border:1px solid var(--border);
+  border-radius:16px;padding:28px;text-align:center;
+  animation:fadeUp .4s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.result-emoji{font-size:48px;margin-bottom:12px}
+.result-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--bright);margin-bottom:8px}
+.result-word{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--orange);margin-bottom:16px}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.rs{background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.rs-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bright)}
+.rs-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin-top:3px}
+.result-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-share2{padding:11px 22px;border-radius:9px;background:var(--orange);color:#fff;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-share2:hover{background:#ea6c0a;transform:translateY(-1px)}
+.btn-more{padding:11px 22px;border-radius:9px;background:transparent;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--border);font-family:'DM Sans',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-more:hover{border-color:var(--blue);color:var(--blue)}
+
+/* Next word countdown */
+.next-word{background:var(--surf2);border:1px solid var(--border);border-radius:10px;padding:12px 20px;text-align:center;width:100%}
+.nw-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text);margin-bottom:6px}
+.nw-timer{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--bright)}
+
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<script src="seo-pwa.js"></script>
+<nav>
+  <a href="playx.html" class="nav-logo">Play<span>x</span></a>
+  <div class="nav-center">Word <span>Blitz</span></div>
+  <a href="playx.html" class="nav-back">← Back</a>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<main>
+  <div class="game-header">
+    <div class="daily-badge"><span class="fire">🔥</span> Daily Challenge</div>
+    <div class="game-num" id="game-num">Word Blitz #284</div>
+    <div class="game-sub">Everyone gets the same word today</div>
+  </div>
+
+  <div class="top-bar">
+    <div class="tbar-item">
+      <div class="tbar-num" id="timer-num">00:00</div>
+      <div class="tbar-label">Time</div>
+    </div>
+    <div class="tbar-divider"></div>
+    <div class="tbar-item">
+      <div class="tbar-num" id="stat-played">94,112</div>
+      <div class="tbar-label">Played Today</div>
+    </div>
+    <div class="tbar-divider"></div>
+    <div class="tbar-item">
+      <div class="tbar-num" id="stat-streak">0</div>
+      <div class="tbar-label">Your Streak</div>
+    </div>
+    <div class="tbar-divider"></div>
+    <div class="tbar-item">
+      <div class="tbar-num" id="stat-avg">4.2</div>
+      <div class="tbar-label">Avg Guesses</div>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div id="result-panel" class="result-panel hidden"></div>
+
+  <div class="next-word hidden" id="next-word">
+    <div class="nw-label">Next word in</div>
+    <div class="nw-timer" id="next-timer">--:--:--</div>
+  </div>
+
+  <div class="keyboard" id="keyboard"></div>
+</main>
+
+<script>
+// Word list — pick by day of year so everyone gets same word
+const WORDS = ['BRAVE','STORM','BLAZE','CRISP','FANCY','GHOST','HONEY','JAZZY','KNACK','LUNAR','MAGIC','NERVE','OZONE','PLAZA','QUEST','RADAR','SWIFT','TORCH','ULTRA','VIVID','WALTZ','XENON','YACHT','ZESTY','ABBEY','BLUNT','CHESS','DRIFT','EMBER','FLINT','GRASP','HAVOC','INFER','JOUST','KARMA','LEMON','MIDST','NIFTY','OLIVE','PIXEL','QUIRK','REALM','SNACK','TIGER','UNIFY','VAPOR','WITTY','EXPEL','YIELD','ZEBRA'];
+const VALID = new Set([...WORDS,'ABOUT','ABOVE','ABUSE','ACTOR','ACUTE','ADMIT','ADOPT','ADULT','AFTER','AGAIN','AGENT','AGREE','AHEAD','ALARM','ALBUM','ALERT','ALIEN','ALIGN','ALIVE','ALLEY','ALLOW','ALONE','ALONG','ALTER','ANGEL','ANGER','ANGLE','ANGRY','ANIME','ANNEX','APART','APPLY','APRIL','ARENA','ARGUE','ARISE','ARRAY','ASIDE','ASSET','ATLAS','ATOMS','ATTIC','AUDIO','AUDIT','AVOID','AWARD','AWARE','AWFUL','BADLY','BAKER','BASES','BASIC','BASIS','BATCH','BEACH','BEGAN','BEGIN','BEING','BELOW','BENCH','BIRTH','BLACK','BLADE','BLAND','BLANK','BLAST','BLEED','BLEND','BLESS','BLOCK','BLOOD','BLOOM','BLOWN','BOARD','BOUND','BOXED','BRAIN','BRAND','BREAD','BREAK','BREED','BRICK','BRIDE','BRIEF','BRING','BROAD','BROKE','BUILD','BUILT','BUNCH','BURNS','BURST','BUYER','CABIN','CABLE','CAME','CANDY','CARRY','CATCH','CAUSE','CHAIR','CHALK','CHEAP','CHECK','CHEEK','CHEER','CHILE','CHILL','CHUNK','CIVIC','CIVIL','CLAIM','CLASH','CLASS','CLEAN','CLEAR','CLICK','CLIFF','CLIMB','CLING','CLOCK','CLONE','CLOSE','CLOTH','CLOUD','CLOWN','COACH','COAST','COMET','COMIC','COMMA','COULD','COUNT','COURT','COVER','CRACK','CRAFT','CRANE','CRASH','CRAWL','CRAZY','CREAM','CREEK','CREEP','CRIME','CROSS','CROWD','CROWN','CRUDE','CRUEL','CRUSH','CRUSH','CURVE','CYCLE','DAILY','DANCE','DATED','DEATH','DEBUT','DECAY','DELAY','DELTA','DENSE','DEPOT','DEPTH','DERBY','DEVIL','DIRTY','DISCO','DITCH','DODGE','DOING','DOUBT','DOUGH','DRAIN','DRAMA','DRAPE','DRAW','DRAWN','DREAM','DRIED','DRINK','DRIVE','DROVE','DRUGS','DRUNK','DROWN','DULLY','DUNNO','DYING','EAGER','EARLY','EARTH','EIGHT','ELITE','EMPTY','ENEMY','ENJOY','ENTER','ENTRY','EQUAL','ERROR','ESSAY','ETHER','EVERY','EXACT','EXCEL','EXIST','EXTRA','FABLE','FACED','FACTS','FAITH','FALLS','FALSE','FATAL','FAULT','FEAST','FENCE','FIFTH','FIFTY','FIGHT','FILED','FILES','FILM','FINAL','FIRST','FIXED','FLAME','FLASH','FLOOR','FLOUR','FLUID','FOCUS','FOLKS','FORCE','FORGE','FORMA','FORTE','FORTH','FORUM','FOUND','FRAME','FRANK','FRAUD','FRESH','FRONT','FROZE','FRUIT','FULLY','FUNNY','GAMES','GIANT','GIVEN','GOING','GRADE','GRAND','GRANT','GRAPH','GRASP','GRASS','GRAVE','GREAT','GREED','GREEN','GREET','GRIEF','GRILL','GROAN','GROSS','GROUP','GROUT','GROWN','GROWS','GUARD','GUIDE','GUILD','GUILT','GUISE','GUSTS','HABIT','HAPPY','HARSH','HEADS','HEAVY','HELPS','HENCE','HERBS','HINGE','HINTS','HOLLY','HOTEL','HOURS','HOUSE','HUMAN','HURRY','IDEAL','IMAGE','INBOX','INDEX','INDIE','INPUT','INTEL','INTER','INTRO','IRONY','ISSUE','ITEMS','IVORY','JAPAN','JUICE','JUICY','JUMBO','JUDGE','KLING','KNEEL','KNIFE','KNOCK','LARGE','LASER','LATER','LAUGH','LAYER','LEADS','LEARN','LEAVE','LEGAL','LEVEL','LIGHT','LIMIT','LINES','LOFTY','LOGIN','LOOSE','LOVER','LOVER','LUCKY','MANOR','MATCH','MAYBE','MAYOR','MEDIA','MELTS','MERIT','METAL','METER','MINOR','MINUS','MODEL','MONEY','MONTH','MORAL','MOSSY','MOUSE','MOUTH','MOVED','MOVIE','MUSIC','NAMES','NASAL','NICHE','NIGHT','NINJA','NOBLE','NOISE','NORTH','NOTED','NOVEL','NURSE','OAKLY','OLDER','ONSET','ORDER','OTHER','OUTER','OWNED','OWNER','OXIDE','OZONE','PANDA','PANEL','PANIC','PAPER','PARTY','PAUSE','PEACE','PERCH','PHONE','PHOTO','PIANO','PIECE','PILOT','PITCH','PLACE','PLAIN','PLANE','PLANT','PLATE','PLANK','PLATE','PLAY','PLEAD','PLUMB','PLUME','PLUSH','POINT','POLAR','POLL','POWER','PRESS','PRICE','PRIDE','PRIME','PRINT','PRIZE','PROBE','PROUD','PULSE','PUNCH','QUEEN','QUICK','QUIET','QUOTE','RAISE','RANGE','RAPID','RATIO','REACH','REACT','READS','READY','REBEL','RECAP','REPAY','REPLY','RIDER','RISKY','RIVAL','RIVER','RIVAL','ROCKY','ROUGE','ROUGH','ROUND','ROUTE','ROYAL','RUGBY','RULER','RURAL','RUSTY','SADLY','SAINT','SCALE','SCARE','SCENE','SCOPE','SCORE','SEATS','SEEDS','SEIZE','SERVE','SEVEN','SHARP','SHEAR','SHELF','SHINE','SHOCK','SHONE','SHOOT','SHORT','SHOUT','SHOWN','SIGHT','SINCE','SIXTH','SIXTY','SIZED','SKILL','SKULL','SKYVE','SLATE','SLAVE','SLEEP','SLEET','SLICE','SLIDE','SLOPE','SMART','SMASH','SMELL','SMILE','SMOKE','SNARE','SNEAK','SNIPE','SOLAR','SOLID','SOLVE','SORRY','SOUND','SPACE','SPEAK','SPEED','SPEND','SPINE','SPLIT','SPOON','SPORT','SPRAY','SQUAD','STAKE','STALE','STAND','STARK','START','STAYS','STEAL','STEEP','STERN','STICK','STIFF','STILL','STING','STOMP','STONE','STOOD','STOVE','STRAP','STRAW','STRIP','STUCK','STUDY','STUFF','STYLE','SUGAR','SUITE','SUNNY','SUPER','SURGE','SWAMP','SWEAR','SWEEP','SWEET','SWELL','SWING','TABLE','TASTE','TENSE','THORN','THOSE','THREE','THREW','THROE','THROW','TITLE','TODAY','TOKEN','TOTAL','TOUCH','TOUGH','TOWEL','TOWER','TRACE','TRACK','TRADE','TRAIL','TRAIN','TREND','TRIAL','TRIED','TRULY','TRUST','TRUTH','TWICE','TWIST','TYPED','UNDER','UNITE','UNTIL','UPSET','URBAN','USAGE','USING','USUAL','VALID','VALUE','VIDEO','VILLA','VIRAL','VIRUS','VISIT','VOICE','VOTER','WAGES','WASTE','WATER','WEEKS','WEIRD','WHILE','WHOLE','WINDS','WOMAN','WOMEN','WORLD','WORRY','WOULD','WOUND','WRITE','WROTE','WRONG','YEARS','YOUNG','YOURS']);
+
+// Deterministic daily word
+const today = new Date();
+const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+const WORD = WORDS[dayOfYear % WORDS.length];
+const PUZZLE_NUM = 280 + dayOfYear % 100;
+
+document.getElementById('game-num').textContent = `Word Blitz #${PUZZLE_NUM}`;
+
+const MAX_GUESSES = 6;
+let guesses = [], currentGuess = '', gameOver = false;
+let timerSec = 0, timerInterval;
+let streak = parseInt(localStorage.getItem('wb_streak') || '0');
+
+document.getElementById('stat-streak').textContent = streak;
+
+// Build grid
+const gridEl = document.getElementById('grid');
+for (let r = 0; r < MAX_GUESSES; r++) {
+  const row = document.createElement('div');
+  row.className = 'grid-row';
+  row.id = 'row-' + r;
+  for (let c = 0; c < 5; c++) {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.id = `tile-${r}-${c}`;
+    row.appendChild(tile);
+  }
+  gridEl.appendChild(row);
+}
+
+// Build keyboard
+const ROWS = [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','⌫']];
+const kbEl = document.getElementById('keyboard');
+ROWS.forEach(row => {
+  const rowEl = document.createElement('div');
+  rowEl.className = 'kb-row';
+  row.forEach(k => {
+    const btn = document.createElement('button');
+    btn.className = 'key' + (k.length > 1 ? ' wide' : '');
+    btn.textContent = k;
+    btn.dataset.key = k;
+    btn.addEventListener('click', () => handleKey(k));
+    rowEl.appendChild(btn);
+  });
+  kbEl.appendChild(rowEl);
+});
+
+// Timer
+timerInterval = setInterval(() => {
+  if (gameOver) return;
+  timerSec++;
+  const m = String(Math.floor(timerSec/60)).padStart(2,'0');
+  const s = String(timerSec%60).padStart(2,'0');
+  document.getElementById('timer-num').textContent = `${m}:${s}`;
+}, 1000);
+
+// Next word countdown
+function updateNextTimer() {
+  const now = new Date();
+  const midnight = new Date(); midnight.setHours(24,0,0,0);
+  let diff = Math.floor((midnight - now) / 1000);
+  const h = String(Math.floor(diff/3600)).padStart(2,'0');
+  diff %= 3600;
+  const m = String(Math.floor(diff/60)).padStart(2,'0');
+  const sec = String(diff%60).padStart(2,'0');
+  document.getElementById('next-timer').textContent = `${h}:${m}:${sec}`;
+}
+setInterval(updateNextTimer, 1000);
+
+function showToast(msg, dur=1800) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function handleKey(k) {
+  if (gameOver) return;
+  if (k === '⌫' || k === 'BACKSPACE') {
+    currentGuess = currentGuess.slice(0,-1);
+    updateCurrentRow();
+  } else if (k === 'ENTER') {
+    submitGuess();
+  } else if (/^[A-Z]$/.test(k) && currentGuess.length < 5) {
+    currentGuess += k;
+    updateCurrentRow();
+  }
+}
+
+function updateCurrentRow() {
+  const row = guesses.length;
+  for (let c = 0; c < 5; c++) {
+    const tile = document.getElementById(`tile-${row}-${c}`);
+    tile.textContent = currentGuess[c] || '';
+    tile.className = 'tile' + (currentGuess[c] ? ' filled' : '');
+  }
+}
+
+function submitGuess() {
+  if (currentGuess.length < 5) { showToast('Not enough letters'); shakeRow(guesses.length); return; }
+  if (!VALID.has(currentGuess) && !WORDS.includes(currentGuess)) { showToast('Not in word list'); shakeRow(guesses.length); return; }
+
+  const guess = currentGuess;
+  guesses.push(guess);
+  currentGuess = '';
+
+  // Score the guess
+  const result = Array(5).fill('absent');
+  const wordArr = WORD.split('');
+  const used = Array(5).fill(false);
+
+  // Correct
+  for (let i = 0; i < 5; i++) {
+    if (guess[i] === wordArr[i]) { result[i] = 'correct'; used[i] = true; }
+  }
+  // Present
+  for (let i = 0; i < 5; i++) {
+    if (result[i] === 'correct') continue;
+    for (let j = 0; j < 5; j++) {
+      if (!used[j] && guess[i] === wordArr[j]) { result[i] = 'present'; used[j] = true; break; }
+    }
+  }
+
+  // Animate tiles
+  const row = guesses.length - 1;
+  result.forEach((r, i) => {
+    setTimeout(() => {
+      const tile = document.getElementById(`tile-${row}-${i}`);
+      tile.classList.add(r);
+      tile.style.animationDelay = '0s';
+    }, i * 120);
+  });
+
+  // Update keyboard
+  setTimeout(() => {
+    result.forEach((r, i) => {
+      const key = document.querySelector(`[data-key="${guess[i]}"]`);
+      if (!key) return;
+      if (r === 'correct') key.className = 'key correct';
+      else if (r === 'present' && !key.classList.contains('correct')) key.className = 'key present';
+      else if (r === 'absent' && !key.classList.contains('correct') && !key.classList.contains('present')) key.className = 'key absent';
+      if (key.classList.contains('wide')) key.classList.add('wide');
+    });
+  }, 600);
+
+  const won = result.every(r => r === 'correct');
+
+  setTimeout(() => {
+    if (won) {
+      gameOver = true;
+      clearInterval(timerInterval);
+      streak++;
+      localStorage.setItem('wb_streak', streak);
+      const msgs = ['Genius! 🧠','Excellent! ⚡','Great job! 🎯','Nice! 👍','Phew! 😅','Lucky! 🍀'];
+      showToast(msgs[guesses.length - 1] || 'Got it!', 2000);
+      const wxp = PlayxCore.trackWordWin(guesses.length); showXPToast(wxp.xpGain, "Word Found!", WORD+" — "+guesses.length+" guesses", "📖"); setTimeout(() => showResult(true), 1500);
+    } else if (guesses.length >= MAX_GUESSES) {
+      gameOver = true;
+      clearInterval(timerInterval);
+      showToast(WORD, 3000);
+      setTimeout(() => showResult(false), 1500);
+    }
+  }, 700);
+}
+
+function shakeRow(r) {
+  const row = document.getElementById('row-' + r);
+  row.querySelectorAll('.tile').forEach(t => {
+    t.classList.remove('shake');
+    void t.offsetWidth;
+    t.classList.add('shake');
+  });
+}
+
+function showResult(won) {
+  document.getElementById('result-panel').classList.remove('hidden');
+  document.getElementById('next-word').classList.remove('hidden');
+  updateNextTimer();
+
+  const guessNum = guesses.length;
+  const timeStr = document.getElementById('timer-num').textContent;
+  const emojis = {1:'🤯',2:'🧠',3:'⚡',4:'🎯',5:'😅',6:'🍀'};
+
+  document.getElementById('result-panel').innerHTML = `
+    <div class="result-emoji">${won ? (emojis[guessNum] || '🎉') : '💀'}</div>
+    <div class="result-title">${won ? 'You got it!' : 'Better luck tomorrow!'}</div>
+    <div class="result-word">The word was: <strong>${WORD}</strong></div>
+    <div class="result-stats">
+      <div class="rs"><div class="rs-num">${won ? guessNum : 'X'}/6</div><div class="rs-label">Guesses</div></div>
+      <div class="rs"><div class="rs-num">${timeStr}</div><div class="rs-label">Time</div></div>
+      <div class="rs"><div class="rs-num">${streak}</div><div class="rs-label">🔥 Streak</div></div>
+    </div>
+    <div class="result-btns">
+      <button class="btn-share2" onclick="shareResult(${won}, ${guessNum}, '${timeStr}')">📤 Share Result</button>
+      <a href="playx.html" class="btn-more">🎮 More Games</a>
+    </div>
+  `;
+}
+
+function shareResult(won, guesses, time) {
+  const grid = document.querySelectorAll('.grid-row');
+  let emoji = `Playx Word Blitz #${PUZZLE_NUM}\n`;
+  emoji += won ? `${guesses}/6 in ${time}\n\n` : `X/6\n\n`;
+  grid.forEach(row => {
+    row.querySelectorAll('.tile').forEach(t => {
+      if (t.classList.contains('correct')) emoji += '🟩';
+      else if (t.classList.contains('present')) emoji += '🟨';
+      else if (t.classList.contains('absent')) emoji += '⬛';
+    });
+    emoji += '\n';
+  });
+  emoji += '\nPlay at playx.io';
+  if (navigator.share) navigator.share({title:'Word Blitz', text:emoji});
+  else navigator.clipboard.writeText(emoji).then(()=>showToast('Copied!'));
+}
+
+// Keyboard events
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.altKey || e.metaKey) return;
+  if (e.key === 'Enter') handleKey('ENTER');
+  else if (e.key === 'Backspace') handleKey('⌫'); PlayxSound?.keyDelete();
+  else if (/^[a-zA-Z]$/.test(e.key)) handleKey(e.key.toUpperCase()); PlayxSound?.keyPress();
+});
+
+// Live played count
+const playedEl = document.getElementById('stat-played');
+let playedBase = 94112;
+setInterval(() => {
+  playedBase += Math.floor(Math.random()*3);
+  playedEl.textContent = playedBase.toLocaleString();
+}, 5000);
+</script>
+<script src="sounds.js"></script>
+<script src="analytics.js"></script>
+<script src="xp.js"></script>
+<script src="profilebar.js"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+<script src="ads.js"></script>
+</body>
+</html>

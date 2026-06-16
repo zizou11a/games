@@ -1,0 +1,74 @@
+{
+  "name": "Playx — Play. Quiz. Challenge.",
+  "short_name": "Playx",
+  "description": "Free HTML5 games, daily challenges, and personality quizzes. No downloads required.",
+  "start_url": "/playx.html",
+  "display": "standalone",
+  "background_color": "#080b14",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Playx Home"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "shortcuts": [
+    {
+      "name": "Daily Challenge",
+      "short_name": "Daily",
+      "description": "Play today's Word Blitz challenge",
+      "url": "/word-blitz.html",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Shadow Runner",
+      "short_name": "Runner",
+      "description": "Play Shadow Runner",
+      "url": "/shadow-runner.html",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Leaderboard",
+      "short_name": "Ranks",
+      "description": "View global leaderboard",
+      "url": "/leaderboard.html",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ]
+}

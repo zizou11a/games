@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Tips to Score 1000+ in Shadow Runner | Playx Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080b14;--surf:#0f1420;--surf2:#161d2e;--border:#1e2a40;--blue:#3b82f6;--orange:#f97316;--green:#10b981;--purple:#8b5cf6;--text:#94a3b8;--bright:#e2e8f0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(8,11,20,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-logo span{color:var(--orange);-webkit-text-fill-color:var(--orange)}
+.nav-back{font-size:13px;color:var(--text);padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:all .2s}
+.nav-back:hover{border-color:var(--blue);color:var(--blue)}
+
+/* Layout */
+.page{max-width:1060px;margin:0 auto;padding:36px 24px 80px;display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:start}
+.article-col{}
+.sidebar-col{position:sticky;top:80px;display:flex;flex-direction:column;gap:20px}
+
+/* Article header */
+.article-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.art-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;background:rgba(59,130,246,0.15);color:var(--blue)}
+.art-date{font-size:12px;color:var(--text)}
+.art-read{font-size:12px;color:var(--text)}
+.article-title{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;color:var(--bright);letter-spacing:-1px;line-height:1.15;margin-bottom:16px}
+.article-subtitle{font-size:18px;color:var(--text);line-height:1.7;margin-bottom:24px;font-weight:300}
+.article-meta{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:28px;flex-wrap:wrap}
+.author{display:flex;align-items:center;gap:10px}
+.author-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:16px}
+.author-name{font-size:14px;font-weight:700;color:var(--bright)}
+.author-role{font-size:11px;color:var(--text)}
+.article-stats{display:flex;gap:16px;margin-left:auto}
+.astat{font-size:12px;color:var(--text);display:flex;align-items:center;gap:4px}
+
+/* Hero image */
+.article-hero{height:260px;background:linear-gradient(135deg,#0d1f3c,#0a1628);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:80px;margin-bottom:28px;border:1px solid var(--border);position:relative;overflow:hidden}
+.article-hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.01) 2px,rgba(255,255,255,0.01) 4px)}
+
+/* Article body */
+.article-body{font-size:16px;line-height:1.85;color:var(--text)}
+.article-body h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bright);margin:36px 0 14px;letter-spacing:-0.3px}
+.article-body h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--bright);margin:28px 0 10px}
+.article-body p{margin-bottom:18px}
+.article-body strong{color:var(--bright);font-weight:600}
+.article-body ul,.article-body ol{margin:0 0 18px 24px;display:flex;flex-direction:column;gap:8px}
+.article-body li{color:var(--text);line-height:1.7}
+
+/* Tip boxes */
+.tip-box{background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.2);border-left:3px solid var(--blue);border-radius:8px;padding:16px 20px;margin:24px 0}
+.tip-box-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.tip-box p{margin:0;font-size:14px}
+.warning-box{background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.2);border-left:3px solid var(--orange);border-radius:8px;padding:16px 20px;margin:24px 0}
+.warning-box-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:6px}
+.score-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}
+.score-table th{background:var(--surf2);padding:10px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text);font-weight:700}
+.score-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text)}
+.score-table tr:hover td{background:var(--surf2)}
+.score-table td:first-child{color:var(--bright);font-weight:600}
+.score-num{font-family:'Syne',sans-serif;font-weight:800;color:var(--orange)}
+
+/* In-article ad */
+.ad-inline{background:var(--surf);border:1px dashed var(--border);border-radius:10px;padding:14px;text-align:center;margin:28px 0;min-height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.ad-label{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--border);margin-bottom:4px}
+.ad-placeholder{font-size:12px;color:var(--border)}
+
+/* Share section */
+.share-section{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:24px;margin:32px 0;text-align:center}
+.share-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--bright);margin-bottom:8px}
+.share-sub{font-size:13px;color:var(--text);margin-bottom:16px}
+.share-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.share-btn{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px}
+.share-tw{background:#1d9bf0;color:#fff}
+.share-tw:hover{background:#1a8cd8}
+.share-fb{background:#1877f2;color:#fff}
+.share-fb:hover{background:#166fe5}
+.share-wa{background:#25d366;color:#fff}
+.share-wa:hover{background:#20bd5a}
+.share-copy{background:var(--surf2);color:var(--text);border:1px solid var(--border)}
+.share-copy:hover{border-color:var(--blue);color:var(--bright)}
+
+/* Related posts */
+.related-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--bright);margin-bottom:16px}
+.related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.related-card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s}
+.related-card:hover{border-color:var(--blue);transform:translateY(-2px)}
+.related-icon{font-size:28px;margin-bottom:8px}
+.related-card-title{font-size:13px;font-weight:700;color:var(--bright);line-height:1.4;margin-bottom:6px}
+.related-meta{font-size:11px;color:var(--text)}
+
+/* Sidebar */
+.sidebar-card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:18px}
+.sidebar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--bright);margin-bottom:12px}
+.toc-list{display:flex;flex-direction:column;gap:8px}
+.toc-item{font-size:13px;color:var(--text);padding:6px 10px;border-radius:6px;cursor:pointer;transition:all .15s;border-left:2px solid transparent;display:flex;align-items:center;gap:8px}
+.toc-item:hover{color:var(--bright);background:var(--surf2);border-color:var(--blue)}
+.toc-item.active{color:var(--blue);border-color:var(--blue)}
+.toc-num{font-size:11px;color:var(--text);font-weight:700;width:18px}
+.play-cta{background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(139,92,246,0.08));border:1px solid rgba(59,130,246,0.25);border-radius:14px;padding:20px;text-align:center}
+.cta-icon{font-size:36px;margin-bottom:8px}
+.cta-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--bright);margin-bottom:6px}
+.cta-sub{font-size:12px;color:var(--text);margin-bottom:12px;line-height:1.5}
+.cta-btn{display:block;padding:10px 16px;border-radius:8px;background:var(--blue);color:#fff;font-size:13px;font-weight:700;text-align:center;transition:all .2s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%}
+.cta-btn:hover{background:#2563eb}
+.sidebar-ad{background:var(--surf);border:1px dashed var(--border);border-radius:14px;padding:14px;text-align:center;min-height:250px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+
+@media(max-width:860px){.page{grid-template-columns:1fr}.sidebar-col{display:none}}
+@media(max-width:600px){nav{padding:0 16px}.page{padding:20px 14px 60px}.related-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="playx.html" class="nav-logo">Play<span>x</span></a>
+  <a href="blog.html" class="nav-back">← Blog</a>
+</nav>
+
+<div class="page">
+  <article class="article-col">
+    <div class="article-eyebrow">
+      <span class="art-tag">🎮 Game Guide</span>
+      <span class="art-date">June 14, 2026</span>
+      <span class="art-read">5 min read</span>
+    </div>
+
+    <h1 class="article-title">10 Tips to Score 1000+ in Shadow Runner</h1>
+    <p class="article-subtitle">Most players plateau around 400 points. Here's the exact strategy to break through — and why the top 1% think about obstacles completely differently.</p>
+
+    <div class="article-meta">
+      <div class="author">
+        <div class="author-avatar">🎮</div>
+        <div>
+          <div class="author-name">Playx Team</div>
+          <div class="author-role">Game Analyst</div>
+        </div>
+      </div>
+      <div class="article-stats">
+        <span class="astat">👁 12,400 views</span>
+        <span class="astat">❤️ 847 likes</span>
+        <span class="astat">💬 63 comments</span>
+      </div>
+    </div>
+
+    <!-- Top Ad -->
+<div data-ad-zone="banner_top" data-ad-format="auto" style="margin-bottom:16px"></div>
+    <div class="ad-inline">
+      <div class="ad-label">Advertisement</div>
+      <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX"></script>
+      <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+      <div class="ad-placeholder">[ AdSense 728×90 — Paste your code here ]</div>
+    </div>
+
+    <div class="article-hero">🏃</div>
+
+    <div class="article-body">
+      <p>After analyzing over <strong>500,000 Shadow Runner sessions</strong>, we found something surprising: the gap between a 400-point player and a 1000-point player isn't reflexes — it's pattern recognition and pre-positioning.</p>
+      <p>Here's everything you need to know.</p>
+
+      <h2 id="tip1">1. Master the "Pre-Jump" Technique</h2>
+      <p>The biggest mistake beginners make is reacting to obstacles instead of anticipating them. By the time you see an obstacle and press jump, you've already lost 40ms to reaction time.</p>
+      <p>The top players jump <strong>0.3 seconds before the obstacle appears</strong> — based on the rhythm of spawns, not what they see on screen.</p>
+
+      <div class="tip-box">
+        <div class="tip-box-label">💡 Pro Tip</div>
+        <p>After 200 points, obstacles spawn every ~90 frames. Count the rhythm and you can predict the next spawn before it appears.</p>
+      </div>
+
+      <h2 id="tip2">2. Never Waste a Slide</h2>
+      <p>Sliding has a <strong>28-frame cooldown</strong> after recovery. Most players slide unnecessarily, leaving them vulnerable to the next obstacle. Only slide under high obstacles — jump over everything else.</p>
+
+      <h2 id="tip3">3. Collect Every Crystal</h2>
+      <p>Each crystal gives +25 XP and keeps your momentum alive. More importantly, skilled players use crystal positions as <strong>obstacle approach guides</strong> — crystals always spawn 1 tile ahead of the next obstacle cluster.</p>
+
+      <!-- Mid-article Ad -->
+      <div class="ad-inline">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-placeholder">[ AdSense In-Article Ad ]</div>
+      </div>
+
+      <h2 id="tip4">4. The Speed Curve — Know Your Checkpoints</h2>
+      <p>Speed increases every 200 points. Here's exactly what changes at each checkpoint:</p>
+
+      <table class="score-table">
+        <thead><tr><th>Score</th><th>Speed</th><th>Obstacle Rate</th><th>Strategy</th></tr></thead>
+        <tbody>
+          <tr><td>0–200</td><td class="score-num">1x</td><td>Every 100 frames</td><td>Learn patterns, collect crystals</td></tr>
+          <tr><td>200–400</td><td class="score-num">1.8x</td><td>Every 85 frames</td><td>Switch to pre-jump technique</td></tr>
+          <tr><td>400–600</td><td class="score-num">2.6x</td><td>Every 70 frames</td><td>Pure rhythm — stop looking at obstacles</td></tr>
+          <tr><td>600–800</td><td class="score-num">3.4x</td><td>Every 58 frames</td><td>Muscle memory only</td></tr>
+          <tr><td>800–1000</td><td class="score-num">4.2x</td><td>Every 48 frames</td><td>Zone state — breathe, don't think</td></tr>
+          <tr><td>1000+</td><td class="score-num">5x+</td><td>Every 40 frames</td><td>Top 1% territory</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="tip5">5. Use Your Lives Strategically</h2>
+      <p>You have 3 lives. Most players treat a hit as a failure. The top players treat the first hit as a <strong>calibration tool</strong> — it tells them exactly where their timing is off.</p>
+
+      <div class="warning-box">
+        <div class="warning-box-label">⚠️ Common Mistake</div>
+        <p>Don't panic after the first hit. The 80-frame invincibility window is your reset button — use it to re-sync your rhythm.</p>
+      </div>
+
+      <h2 id="tip6">6. The "Tunnel Vision" Zone</h2>
+      <p>Past 600 points, stop looking at individual obstacles. Focus your eyes on a point <strong>3-4 obstacles ahead</strong>. Your peripheral vision will handle the immediate threat while your brain plans the sequence.</p>
+
+      <h2 id="tip7">7. Breathe on Purpose</h2>
+      <p>This sounds ridiculous but it works: <strong>exhale on every jump</strong>. It slows your heart rate, reduces tension in your fingers, and — according to esports coaches — can add 15-20% to your reaction consistency.</p>
+
+      <h2 id="tip8">8. Play the Same Session 3 Times</h2>
+      <p>Your first run is warmup. Your second run is learning. Your third run is peak performance. If you want a high score, don't quit after one bad game — the third session is always your best.</p>
+
+      <h2 id="tip9">9. Screen Position Matters</h2>
+      <p>If you're on desktop, sit at least 50cm from the screen. The wider your field of view, the earlier your peripheral vision detects obstacles. On mobile, hold the phone at eye level, not angled down.</p>
+
+      <h2 id="tip10">10. The Mental Reset</h2>
+      <p>Every player has a "fear score" — a number where they start tensing up because they don't want to lose their streak. Once you hit your fear score, <strong>consciously relax your shoulders</strong> and tell yourself the run is already a success. Paradoxically, this is when scores jump the most.</p>
+
+      <div class="tip-box">
+        <div class="tip-box-label">🏆 Final Advice</div>
+        <p>The difference between 400 and 1000 points is almost entirely mental. The mechanics are learnable in a day. The mindset takes a week. But once it clicks, you won't go back.</p>
+      </div>
+    </div>
+
+    <!-- Share -->
+    <div class="share-section">
+      <div class="share-title">Found this helpful?</div>
+      <div class="share-sub">Share it with your friends and challenge them to beat your score</div>
+      <div class="share-btns">
+        <button class="share-btn share-tw" onclick="shareArticle('twitter')">🐦 Twitter</button>
+        <button class="share-btn share-wa" onclick="shareArticle('whatsapp')">💬 WhatsApp</button>
+        <button class="share-btn share-fb" onclick="shareArticle('facebook')">📘 Facebook</button>
+        <button class="share-btn share-copy" onclick="shareArticle('copy')">🔗 Copy Link</button>
+      </div>
+    </div>
+
+    <!-- Bottom Ad -->
+    <div class="ad-inline">
+      <div class="ad-label">Advertisement</div>
+      <div class="ad-placeholder">[ AdSense 728×90 — Bottom of Article ]</div>
+    </div>
+
+    <!-- Related -->
+    <div class="related-title">More Articles</div>
+    <div class="related-grid">
+      <div class="related-card" onclick="location.href='blog.html'">
+        <div class="related-icon">📖</div>
+        <div class="related-card-title">Word Blitz Strategy: How to Win in 3 Guesses</div>
+        <div class="related-meta">4 min · 8.7K views</div>
+      </div>
+      <div class="related-card" onclick="location.href='blog.html'">
+        <div class="related-icon">💎</div>
+        <div class="related-card-title">How to Reach Level 10 (Mythic) Faster</div>
+        <div class="related-meta">5 min · 7.3K views</div>
+      </div>
+      <div class="related-card" onclick="location.href='blog.html'">
+        <div class="related-icon">🧠</div>
+        <div class="related-card-title">What Your Gamer Type Says About You</div>
+        <div class="related-meta">6 min · 6.2K views</div>
+      </div>
+      <div class="related-card" onclick="location.href='blog.html'">
+        <div class="related-icon">🎮</div>
+        <div class="related-card-title">5 Browser Games Better Than Mobile Apps</div>
+        <div class="related-meta">3 min · 5.1K views</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Sidebar -->
+  <aside class="sidebar-col">
+    <div class="play-cta">
+      <div class="cta-icon">🏃</div>
+      <div class="cta-title">Put It Into Practice</div>
+      <div class="cta-sub">Apply these tips in Shadow Runner right now</div>
+      <a href="shadow-runner.html"><button class="cta-btn">▶ Play Shadow Runner</button></a>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">📋 In This Article</div>
+      <div class="toc-list">
+        <div class="toc-item active"><span class="toc-num">1</span>The Pre-Jump Technique</div>
+        <div class="toc-item"><span class="toc-num">2</span>Never Waste a Slide</div>
+        <div class="toc-item"><span class="toc-num">3</span>Collect Every Crystal</div>
+        <div class="toc-item"><span class="toc-num">4</span>The Speed Curve</div>
+        <div class="toc-item"><span class="toc-num">5</span>Use Lives Strategically</div>
+        <div class="toc-item"><span class="toc-num">6</span>Tunnel Vision Zone</div>
+        <div class="toc-item"><span class="toc-num">7</span>Breathe on Purpose</div>
+        <div class="toc-item"><span class="toc-num">8</span>Play 3 Sessions</div>
+        <div class="toc-item"><span class="toc-num">9</span>Screen Position</div>
+        <div class="toc-item"><span class="toc-num">10</span>The Mental Reset</div>
+      </div>
+    </div>
+
+    <div class="sidebar-ad">
+      <div class="ad-label">Advertisement</div>
+      <div class="ad-placeholder">[ AdSense 300×250 ]</div>
+    </div>
+
+    <div class="sidebar-ad">
+      <div class="ad-label">Advertisement</div>
+      <div class="ad-placeholder">[ AdSense 300×600 ]</div>
+    </div>
+  </aside>
+</div>
+
+<script src="sounds.js"></script>
+<script src="analytics.js"></script>
+<script src="xp.js"></script>
+<script src="profilebar.js"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+<script src="seo-pwa.js"></script>
+<script>
+function shareArticle(platform) {
+  const url   = window.location.href;
+  const title = '10 Tips to Score 1000+ in Shadow Runner — Playx';
+  const urls  = {
+    twitter:  `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`,
+    facebook: `https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+  };
+  if (platform === 'copy') {
+    navigator.clipboard.writeText(url).then(() => showXPToast?.(5, 'Link copied!', '', '🔗'));
+  } else {
+    window.open(urls[platform], '_blank', 'width=600,height=400');
+  }
+}
+// Award XP for reading articles
+setTimeout(() => showXPToast?.(15, 'Article Read!', '+15 XP for learning', '📖'), 45000);
+</script>
+<script src="ads.js"></script>
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playx — Play. Quiz. Challenge.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:        #080b14;
+  --surf:      #0f1420;
+  --surf2:     #161d2e;
+  --border:    #1e2a40;
+  --blue:      #3b82f6;
+  --blue-dim:  rgba(59,130,246,0.15);
+  --blue-glow: rgba(59,130,246,0.3);
+  --orange:    #f97316;
+  --orange-dim:rgba(249,115,22,0.15);
+  --green:     #10b981;
+  --green-dim: rgba(16,185,129,0.12);
+  --text:      #94a3b8;
+  --bright:    #e2e8f0;
+  --white:     #ffffff;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+
+/* ── Scrollbar ───────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ── Nav ─────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 60px;
+  background: rgba(8,11,20,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #60a5fa, #3b82f6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.nav-logo span { color: var(--orange); -webkit-text-fill-color: var(--orange); }
+.nav-pills {
+  display: flex; gap: 4px;
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: 40px; padding: 4px;
+}
+.nav-pill {
+  padding: 6px 18px; border-radius: 40px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; color: var(--text);
+}
+.nav-pill:hover { color: var(--bright); }
+.nav-pill.active { background: var(--blue); color: #fff; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-live {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--green);
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+}
+.btn-play {
+  padding: 8px 20px; border-radius: 8px;
+  background: var(--blue); color: #fff;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; transition: all 0.2s;
+}
+.btn-play:hover { background: #2563eb; transform: translateY(-1px); }
+
+/* ── Hero ────────────────────────────────────── */
+.hero {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center;
+  padding: 80px 40px 70px;
+  max-width: 1200px; margin: 0 auto;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -100px; left: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--blue);
+  background: var(--blue-dim); border: 1px solid rgba(59,130,246,0.25);
+  padding: 5px 14px; border-radius: 40px; margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 800; line-height: 1.05;
+  color: var(--bright); letter-spacing: -1.5px;
+  margin-bottom: 20px;
+}
+.hero h1 .accent-blue { color: var(--blue); }
+.hero h1 .accent-orange { color: var(--orange); }
+.hero-sub {
+  font-size: 17px; color: var(--text); max-width: 420px;
+  line-height: 1.7; margin-bottom: 36px;
+}
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.cta-primary {
+  padding: 13px 28px; border-radius: 10px;
+  background: var(--blue); color: #fff;
+  font-weight: 600; font-size: 15px; cursor: pointer;
+  border: none; transition: all 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.cta-primary:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.3); }
+.cta-secondary {
+  padding: 13px 28px; border-radius: 10px;
+  background: transparent; color: var(--bright);
+  font-weight: 600; font-size: 15px; cursor: pointer;
+  border: 1px solid var(--border); transition: all 0.2s;
+}
+.cta-secondary:hover { border-color: var(--blue); color: var(--blue); }
+.hero-stats {
+  display: flex; gap: 28px; margin-top: 40px;
+  padding-top: 28px; border-top: 1px solid var(--border);
+}
+.hero-stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px; font-weight: 800; color: var(--bright);
+}
+.hero-stat-label { font-size: 12px; color: var(--text); margin-top: 2px; }
+
+/* ── Arcade Card (Hero Right) ───────────────── */
+.arcade-card-wrap {
+  perspective: 1000px;
+  display: flex; justify-content: center; align-items: center;
+}
+.arcade-card {
+  width: 100%; max-width: 420px;
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.1);
+  cursor: pointer;
+  position: relative;
+}
+.arcade-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.013) 2px,
+    rgba(255,255,255,0.013) 4px
+  );
+  pointer-events: none; border-radius: 20px;
+  z-index: 2;
+}
+.card-screen {
+  height: 200px;
+  background: linear-gradient(135deg, #0a1628 0%, #0d2040 50%, #091520 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.card-screen-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.card-game-icon {
+  width: 72px; height: 72px; border-radius: 16px;
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; z-index: 1;
+  box-shadow: 0 8px 32px rgba(59,130,246,0.4);
+  position: relative;
+}
+.card-badge {
+  position: absolute; top: 12px; right: 12px;
+  background: var(--orange); color: #fff;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 4px; z-index: 3;
+}
+.card-body { padding: 18px 20px; }
+.card-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.card-category {
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--blue);
+}
+.card-players {
+  font-size: 11px; color: var(--text);
+  display: flex; align-items: center; gap: 5px;
+}
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--bright);
+  margin-bottom: 6px;
+}
+.card-desc { font-size: 13px; color: var(--text); margin-bottom: 16px; }
+.card-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 14px; border-top: 1px solid var(--border);
+}
+.card-stars { color: #fbbf24; font-size: 13px; letter-spacing: 2px; }
+.card-play-btn {
+  padding: 8px 20px; border-radius: 8px;
+  background: var(--blue); color: #fff;
+  font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+  transition: all 0.2s;
+}
+.card-play-btn:hover { background: #2563eb; }
+.card-dots {
+  display: flex; justify-content: center; gap: 6px;
+  padding: 12px 0 16px;
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+.dot.active { background: var(--blue); width: 18px; border-radius: 3px; }
+
+/* ── Daily Challenge ─────────────────────────── */
+.daily-section {
+  background: linear-gradient(135deg, rgba(249,115,22,0.06) 0%, rgba(249,115,22,0.02) 100%);
+  border-top: 1px solid rgba(249,115,22,0.15);
+  border-bottom: 1px solid rgba(249,115,22,0.15);
+  padding: 48px 40px;
+}
+.daily-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 40px; align-items: center;
+}
+.daily-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--orange);
+  margin-bottom: 12px;
+}
+.fire { animation: flicker 1.5s infinite alternate; display: inline-block; }
+@keyframes flicker {
+  0%   { transform: rotate(-2deg) scale(1); }
+  100% { transform: rotate(2deg) scale(1.1); }
+}
+.daily-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px; font-weight: 800;
+  color: var(--bright); letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+.daily-sub { font-size: 15px; color: var(--text); max-width: 500px; }
+.timer-card {
+  background: var(--surf);
+  border: 1px solid rgba(249,115,22,0.3);
+  border-radius: 16px; padding: 24px 32px;
+  text-align: center; min-width: 280px;
+}
+.timer-label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
+.timer-digits {
+  display: flex; gap: 8px; align-items: center;
+  justify-content: center; margin-bottom: 20px;
+}
+.timer-unit {
+  background: var(--surf2);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 16px;
+  text-align: center;
+}
+.timer-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px; font-weight: 800;
+  color: var(--bright); font-variant-numeric: tabular-nums;
+}
+.timer-sep { font-size: 24px; font-weight: 700; color: var(--orange); margin-bottom: 12px; }
+.timer-unit-label { font-size: 9px; color: var(--text); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+.btn-challenge {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: var(--orange); color: #fff;
+  font-weight: 700; font-size: 15px; cursor: pointer;
+  border: none; transition: all 0.2s;
+}
+.btn-challenge:hover { background: #ea6c0a; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(249,115,22,0.35); }
+
+/* ── Section shared styles ───────────────────── */
+.section { padding: 70px 40px; max-width: 1200px; margin: 0 auto; }
+.section-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-end; margin-bottom: 36px;
+}
+.section-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px; font-weight: 800;
+  color: var(--bright); letter-spacing: -0.5px;
+}
+.see-all {
+  font-size: 13px; color: var(--blue); font-weight: 500;
+  display: flex; align-items: center; gap: 4px; cursor: pointer;
+  white-space: nowrap;
+}
+.see-all:hover { text-decoration: underline; }
+
+/* ── Games Grid ──────────────────────────────── */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.game-card {
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  cursor: pointer; transition: all 0.2s;
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+.game-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 8px 32px rgba(59,130,246,0.15);
+  transform: translateY(-4px);
+}
+.game-thumb {
+  height: 130px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px; position: relative;
+}
+.game-card-body { padding: 14px 16px; }
+.game-name {
+  font-weight: 600; font-size: 14px; color: var(--bright);
+  margin-bottom: 4px;
+}
+.game-meta {
+  display: flex; justify-content: space-between;
+  align-items: center;
+}
+.game-tag {
+  font-size: 10px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; padding: 2px 8px;
+  border-radius: 4px;
+}
+.tag-action { background: var(--blue-dim); color: var(--blue); }
+.tag-puzzle { background: rgba(139,92,246,0.15); color: #a78bfa; }
+.tag-arcade { background: var(--orange-dim); color: var(--orange); }
+.tag-word   { background: var(--green-dim); color: var(--green); }
+.game-plays { font-size: 11px; color: var(--text); }
+
+/* ── Quizzes ─────────────────────────────────── */
+.quizzes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.quiz-card {
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.quiz-card:hover {
+  border-color: rgba(139,92,246,0.5);
+  box-shadow: 0 8px 32px rgba(139,92,246,0.1);
+  transform: translateY(-3px);
+}
+.quiz-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.quiz-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--bright); }
+.quiz-desc { font-size: 13px; color: var(--text); line-height: 1.6; }
+.quiz-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 14px; border-top: 1px solid var(--border);
+}
+.quiz-takers { font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 5px; }
+.quiz-duration {
+  font-size: 11px; font-weight: 600;
+  color: var(--text); letter-spacing: 0.5px;
+}
+.quiz-card .game-tag { font-size: 10px; }
+
+/* ── Featured Banner ─────────────────────────── */
+.banner-section { padding: 0 40px 70px; }
+.banner-inner { max-width: 1200px; margin: 0 auto; }
+.banner {
+  background: linear-gradient(135deg, #0d1f3c 0%, #0a1628 60%, #0c1a30 100%);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 20px; padding: 48px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 40px; align-items: center;
+  position: relative; overflow: hidden;
+}
+.banner::before {
+  content: '';
+  position: absolute; right: -80px; top: -80px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 65%);
+}
+.banner-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--blue);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+}
+.banner-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px; font-weight: 800;
+  color: var(--white); letter-spacing: -1px;
+  margin-bottom: 12px; line-height: 1.1;
+}
+.banner-desc { font-size: 15px; color: #93c5fd; max-width: 480px; line-height: 1.7; }
+.banner-cta {
+  display: flex; flex-direction: column; gap: 12px;
+  align-items: flex-end; position: relative; z-index: 1;
+}
+.banner-score {
+  text-align: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 16px 24px;
+}
+.banner-score-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px; font-weight: 800; color: var(--white);
+}
+.banner-score-label { font-size: 11px; color: #93c5fd; margin-top: 2px; }
+
+/* ── Footer ──────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 40px 32px;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px; margin-bottom: 40px;
+}
+.footer-brand .nav-logo { font-size: 24px; margin-bottom: 12px; display: block; }
+.footer-brand p { font-size: 13px; color: var(--text); max-width: 240px; line-height: 1.7; }
+.footer-col h4 {
+  font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--bright);
+  margin-bottom: 16px;
+}
+.footer-col a {
+  display: block; font-size: 13px; color: var(--text);
+  margin-bottom: 10px; transition: color 0.15s; cursor: pointer;
+}
+.footer-col a:hover { color: var(--blue); }
+.footer-bottom {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 24px; border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--text);
+}
+.footer-bottom-logo {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  color: var(--blue); letter-spacing: -0.5px;
+}
+.footer-bottom-logo span { color: var(--orange); }
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-pills { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 40px; }
+  .hero h1 { font-size: 36px; }
+  .arcade-card-wrap { display: none; }
+  .daily-inner { grid-template-columns: 1fr; }
+  .timer-card { min-width: unset; }
+  .section { padding: 48px 20px; }
+  .banner { grid-template-columns: 1fr; }
+  .banner-cta { align-items: flex-start; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .banner-section { padding: 0 20px 48px; }
+  .daily-section { padding: 36px 20px; }
+}
+</style>
+</head>
+<body>
+<script src="seo-pwa.js"></script>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="nav-logo">Play<span>x</span></div>
+  <div class="nav-pills">
+    <div class="nav-pill active">🎮 Games</div>
+    <div class="nav-pill">🧠 Quizzes</div>
+    <div class="nav-pill">🔥 Daily</div>
+    <a href="leaderboard.html" class="nav-pill">🏆 Leaderboard</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-live">
+      <div class="live-dot"></div>
+      <span id="live-count">12,847</span> playing now
+    </div>
+    <button class="btn-play">Sign up free</button>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section style="max-width:1200px;margin:0 auto">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">🎮 The ultimate game hub</div>
+      <h1>
+        Play.<br>
+        <span class="accent-blue">Quiz.</span><br>
+        <span class="accent-orange">Challenge.</span>
+      </h1>
+      <p class="hero-sub">Hundreds of free HTML5 games, daily brain challenges, and viral personality quizzes — all in one place. No downloads. No sign-ups.</p>
+      <div class="hero-ctas">
+        <a href="shadow-runner.html"><button class="cta-primary">▶ Start Playing</button></a>
+        <a href="word-blitz.html"><button class="cta-secondary">Today's Challenge →</button></a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">340+</div>
+          <div class="hero-stat-label">Free games</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">2.1M</div>
+          <div class="hero-stat-label">Players monthly</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">Daily</div>
+          <div class="hero-stat-label">New challenges</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arcade-card-wrap" id="card-wrap">
+      <div class="arcade-card" id="arcade-card">
+        <div class="card-screen">
+          <div class="card-screen-grid"></div>
+          <div class="card-game-icon">🏃</div>
+          <div class="card-badge">🔥 HOT</div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-category">Arcade</div>
+            <div class="card-players">👥 8,200 playing</div>
+          </div>
+          <div class="card-title">Shadow Runner</div>
+          <div class="card-desc">Dodge obstacles and beat your high score in this endless runner.</div>
+          <div class="card-footer">
+            <div class="card-stars">★★★★★</div>
+            <button class="card-play-btn">Play Now</button>
+          </div>
+        </div>
+        <div class="card-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Daily Challenge ── -->
+<div class="daily-section">
+  <div class="daily-inner">
+    <div>
+      <div class="daily-eyebrow"><span class="fire">🔥</span> Daily Challenge</div>
+      <div class="daily-title">Word Blitz #284</div>
+      <p class="daily-sub">Guess today's 5-letter word in 6 tries. Everyone gets the same word. Share your score and see how you rank worldwide.</p>
+      <div style="margin-top:20px;display:flex;gap:20px">
+        <div>
+          <div style="font-size:22px;font-weight:800;color:var(--bright);font-family:'Syne',sans-serif">94,112</div>
+          <div style="font-size:11px;color:var(--text);margin-top:2px">played today</div>
+        </div>
+        <div>
+          <div style="font-size:22px;font-weight:800;color:var(--orange);font-family:'Syne',sans-serif">4.2 avg</div>
+          <div style="font-size:11px;color:var(--text);margin-top:2px">guesses to win</div>
+        </div>
+      </div>
+    </div>
+    <div class="timer-card">
+      <div class="timer-label">⏱ New challenge in</div>
+      <div class="timer-digits">
+        <div class="timer-unit">
+          <div class="timer-num" id="t-h">08</div>
+          <div class="timer-unit-label">hrs</div>
+        </div>
+        <div class="timer-sep">:</div>
+        <div class="timer-unit">
+          <div class="timer-num" id="t-m">34</div>
+          <div class="timer-unit-label">min</div>
+        </div>
+        <div class="timer-sep">:</div>
+        <div class="timer-unit">
+          <div class="timer-num" id="t-s">17</div>
+          <div class="timer-unit-label">sec</div>
+        </div>
+      </div>
+      <a href="word-blitz.html"><button class="btn-challenge">🔥 Play Today's Challenge</button></a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Games Section ── -->
+<div style="max-width:1200px;margin:0 auto">
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">🎮 Games</div>
+        <div class="section-title">Top Games Right Now</div>
+      </div>
+      <div class="see-all">See all 340+ games →</div>
+    </div>
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#0f172a,#1e1b4b)">🏃</div>
+        <div class="game-card-body">
+          <div class="game-name">Shadow Runner</div>
+          <div class="game-meta">
+            <span class="game-tag tag-arcade">Arcade</span>
+            <span class="game-plays">8.2K plays</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#0c1a2e,#0d2d1a)">🧩</div>
+        <div class="game-card-body">
+          <div class="game-name">Block Shift</div>
+          <div class="game-meta">
+            <span class="game-tag tag-puzzle">Puzzle</span>
+            <span class="game-plays">5.1K plays</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#1a0a0a,#2d1a0d)">⚔️</div>
+        <div class="game-card-body">
+          <div class="game-name">Dungeon Rush</div>
+          <div class="game-meta">
+            <span class="game-tag tag-action">Action</span>
+            <span class="game-plays">12.4K plays</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#0f2a0f,#1a3a0a)">🐍</div>
+        <div class="game-card-body">
+          <div class="game-name">Neon Snake</div>
+          <div class="game-meta">
+            <span class="game-tag tag-arcade">Arcade</span>
+            <span class="game-plays">7.8K plays</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#1a1a0a,#2a2000)">💣</div>
+        <div class="game-card-body">
+          <div class="game-name">Minesweeper X</div>
+          <div class="game-meta">
+            <span class="game-tag tag-puzzle">Puzzle</span>
+            <span class="game-plays">3.3K plays</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#0a1a2a,#001433)">🚀</div>
+        <div class="game-card-body">
+          <div class="game-name">Space Drift</div>
+          <div class="game-meta">
+            <span class="game-tag tag-action">Action</span>
+            <span class="game-plays">6.0K plays</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#1a0a1a,#2a0a2e)">🔤</div>
+        <div class="game-card-body">
+          <div class="game-name">LetterDrop</div>
+          <div class="game-meta">
+            <span class="game-tag tag-word">Word</span>
+            <span class="game-plays">9.7K plays</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card">
+        <div class="game-thumb" style="background:linear-gradient(135deg,#0d1f1a,#0a2a20)">🎯</div>
+        <div class="game-card-body">
+          <div class="game-name">Target Zero</div>
+          <div class="game-meta">
+            <span class="game-tag tag-action">Action</span>
+            <span class="game-plays">4.5K plays</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Featured Banner ── -->
+<div class="banner-section">
+  <div class="banner-inner">
+    <div class="banner">
+      <div>
+        <div class="banner-label">⭐ Featured Quiz</div>
+        <div class="banner-title">What Type of<br>Gamer Are You?</div>
+        <p class="banner-desc">12 questions to reveal your true gaming personality — from Speedrunner to Lore Master. Over 2 million results shared on social media.</p>
+        <a href="quiz.html"><button class="cta-primary" style="margin-top:24px">Take the Quiz — 3 min</button></a>
+      </div>
+      <div class="banner-cta">
+        <div class="banner-score">
+          <div class="banner-score-num">2.4M</div>
+          <div class="banner-score-label">quizzes taken</div>
+        </div>
+        <div style="text-align:center;font-size:12px;color:#93c5fd">🔥 Trending this week</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Quizzes Section ── -->
+<div style="max-width:1200px;margin:0 auto">
+  <div class="section" style="padding-top:0">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">🧠 Quizzes</div>
+        <div class="section-title">Viral Personality Quizzes</div>
+      </div>
+      <div class="see-all">See all quizzes →</div>
+    </div>
+    <div class="quizzes-grid">
+      <div class="quiz-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="quiz-icon" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(139,92,246,0.05))">🎮</div>
+          <span class="game-tag tag-puzzle">Personality</span>
+        </div>
+        <div>
+          <div class="quiz-title">What Type of Gamer Are You?</div>
+          <div class="quiz-desc">Discover if you're a Speedrunner, Collector, Lore Nerd, or Chaos Agent in 12 quick questions.</div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-takers">👥 2.4M took this</div>
+          <div class="quiz-duration">3 min</div>
+        </div>
+      </div>
+      <div class="quiz-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="quiz-icon" style="background:linear-gradient(135deg,rgba(249,115,22,0.2),rgba(249,115,22,0.05))">🧠</div>
+          <span class="game-tag tag-arcade">IQ Test</span>
+        </div>
+        <div>
+          <div class="quiz-title">Quick IQ Challenge</div>
+          <div class="quiz-desc">20 pattern and logic questions. How fast can you think? See how you rank globally.</div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-takers">👥 890K took this</div>
+          <div class="quiz-duration">5 min</div>
+        </div>
+      </div>
+      <div class="quiz-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="quiz-icon" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(16,185,129,0.05))">🌍</div>
+          <span class="game-tag tag-word">Trivia</span>
+        </div>
+        <div>
+          <div class="quiz-title">World Geography Blitz</div>
+          <div class="quiz-desc">Can you name 20 capitals in 60 seconds? Most people fail at question 14.</div>
+        </div>
+        <div class="quiz-footer">
+          <div class="quiz-takers">👥 1.1M took this</div>
+          <div class="quiz-duration">2 min</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="nav-logo">Play<span>x</span></span>
+      <p>Free HTML5 games, daily challenges, and personality quizzes. No downloads, no paywalls — just play.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Play</h4>
+      <a>All Games</a>
+      <a>Action</a>
+      <a>Puzzle</a>
+      <a>Word Games</a>
+      <a>Arcade</a>
+    </div>
+    <div class="footer-col">
+      <h4>Quizzes</h4>
+      <a>Personality</a>
+      <a>Trivia</a>
+      <a>IQ Tests</a>
+      <a>Pop Culture</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="blog.html">Blog</a>
+      <a>Blog</a>
+      <a>Submit a Game</a>
+      <a>Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-logo">Play<span>x</span></div>
+    <div>© 2026 Playx. All rights reserved.</div>
+    <div>Made for players, by players ❤️</div>
+  </div>
+</footer>
+
+<script>
+// 3D card tilt effect
+const card = document.getElementById('arcade-card');
+const wrap = document.getElementById('card-wrap');
+if (wrap) {
+  wrap.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2;
+    const y = e.clientY - r.top - r.height / 2;
+    const rotY = (x / r.width) * 14;
+    const rotX = -(y / r.height) * 10;
+    card.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg)`;
+  });
+  wrap.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  });
+}
+
+// Live player counter
+const liveEl = document.getElementById('live-count');
+let liveBase = 12847;
+setInterval(() => {
+  liveBase += Math.floor(Math.random() * 11) - 4;
+  if (liveBase < 12000) liveBase = 12000;
+  liveEl.textContent = liveBase.toLocaleString();
+}, 3000);
+
+// Real countdown to midnight
+function updateTimer() {
+  const now = new Date();
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+  let diff = Math.floor((midnight - now) / 1000);
+  const h = Math.floor(diff / 3600);
+  diff %= 3600;
+  const m = Math.floor(diff / 60);
+  const s = diff % 60;
+  document.getElementById('t-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('t-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('t-s').textContent = String(s).padStart(2,'0');
+}
+updateTimer();
+setInterval(updateTimer, 1000);
+
+// Nav pill switching
+document.querySelectorAll('.nav-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+
+// Card rotation auto-play
+const cardTitles = [
+  { icon: '🏃', name: 'Shadow Runner', cat: 'Arcade', players: '8,200', badge: '🔥 HOT' },
+  { icon: '🧩', name: 'Block Shift',   cat: 'Puzzle', players: '5,100', badge: '⭐ TOP' },
+  { icon: '🚀', name: 'Space Drift',   cat: 'Action', players: '6,000', badge: '🆕 NEW' },
+];
+let cardIdx = 0;
+setInterval(() => {
+  cardIdx = (cardIdx + 1) % cardTitles.length;
+  const c = cardTitles[cardIdx];
+  document.querySelector('.card-game-icon').textContent = c.icon;
+  document.querySelector('.card-title').textContent = c.name;
+  document.querySelector('.card-category').textContent = c.cat;
+  document.querySelector('.card-players').textContent = `👥 ${c.players} playing`;
+  document.querySelector('.card-badge').textContent = c.badge;
+  document.querySelectorAll('.dot').forEach((d,i) => {
+    d.classList.toggle('active', i === cardIdx);
+  });
+}, 3500);
+</script>
+<script src="sounds.js"></script>
+<script src="analytics.js"></script>
+<script src="xp.js"></script>
+<script src="profilebar.js"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+<script src="ads.js"></script>
+</body>
+</html>

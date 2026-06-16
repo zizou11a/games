@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Game Tips, News & Guides | Playx</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080b14;--surf:#0f1420;--surf2:#161d2e;--border:#1e2a40;--blue:#3b82f6;--blue-dim:rgba(59,130,246,0.15);--orange:#f97316;--green:#10b981;--purple:#8b5cf6;--text:#94a3b8;--bright:#e2e8f0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:rgba(8,11,20,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-logo span{color:var(--orange);-webkit-text-fill-color:var(--orange)}
+.nav-back{font-size:13px;color:var(--text);padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:all .2s}
+.nav-back:hover{border-color:var(--blue);color:var(--blue)}
+
+.page{max-width:1100px;margin:0 auto;padding:36px 24px 80px}
+
+/* Header */
+.page-eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.page-title{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:var(--bright);letter-spacing:-1.5px;margin-bottom:8px}
+.page-sub{font-size:15px;color:var(--text);margin-bottom:36px}
+
+/* Ad banner */
+.ad-banner{background:var(--surf);border:1px dashed var(--border);border-radius:12px;padding:16px;text-align:center;margin-bottom:32px;min-height:90px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.ad-label{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--border);margin-bottom:6px}
+.ad-placeholder{font-size:12px;color:var(--border)}
+
+/* Featured post */
+.featured-post{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;background:var(--surf);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:40px;cursor:pointer;transition:all .2s}
+.featured-post:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 12px 40px rgba(59,130,246,0.1)}
+.featured-thumb{height:280px;display:flex;align-items:center;justify-content:center;font-size:80px;background:linear-gradient(135deg,#0d1f3c,#0a1628);position:relative}
+.featured-badge{position:absolute;top:16px;left:16px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:5px}
+.featured-body{padding:32px}
+.post-category{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.featured-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--bright);letter-spacing:-0.5px;line-height:1.2;margin-bottom:12px}
+.post-excerpt{font-size:14px;color:var(--text);line-height:1.8;margin-bottom:20px}
+.post-meta{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--text)}
+.post-author{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--bright)}
+.post-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:11px}
+.read-time{color:var(--text)}
+.read-more{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:13px;font-weight:700;color:var(--blue)}
+.read-more:hover{text-decoration:underline}
+
+/* Layout */
+.blog-layout{display:grid;grid-template-columns:1fr 320px;gap:32px}
+
+/* Posts grid */
+.posts-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.posts-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--bright)}
+.category-pills{display:flex;gap:6px;flex-wrap:wrap}
+.cat-pill{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surf);color:var(--text);transition:all .2s;font-family:'DM Sans',sans-serif}
+.cat-pill:hover{border-color:var(--blue);color:var(--bright)}
+.cat-pill.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+.posts-grid{display:flex;flex-direction:column;gap:16px}
+.post-card{background:var(--surf);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:120px 1fr;cursor:pointer;transition:all .2s}
+.post-card:hover{border-color:var(--blue);transform:translateX(4px)}
+.post-thumb{display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--surf2)}
+.post-body{padding:16px}
+.post-card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--bright);margin-bottom:6px;line-height:1.3}
+.post-card-excerpt{font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-card-meta{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text)}
+.post-tag{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:3px}
+.tag-guide{background:var(--blue-dim);color:var(--blue)}
+.tag-news{background:rgba(249,115,22,0.15);color:var(--orange)}
+.tag-tips{background:rgba(16,185,129,0.12);color:var(--green)}
+.tag-quiz{background:rgba(139,92,246,0.15);color:var(--purple)}
+
+/* Sidebar */
+.sidebar{display:flex;flex-direction:column;gap:20px}
+.sidebar-card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:20px}
+.sidebar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--bright);margin-bottom:14px}
+.trending-list{display:flex;flex-direction:column;gap:12px}
+.trend-item{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.trend-item:hover .trend-title{color:var(--blue)}
+.trend-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--border);flex-shrink:0;width:24px}
+.trend-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;transition:color .15s}
+.trend-reads{font-size:11px;color:var(--text);margin-top:2px}
+
+/* Newsletter */
+.newsletter-card{background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(139,92,246,0.05));border:1px solid rgba(59,130,246,0.2);border-radius:14px;padding:20px;text-align:center}
+.nl-icon{font-size:32px;margin-bottom:10px}
+.nl-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--bright);margin-bottom:6px}
+.nl-sub{font-size:12px;color:var(--text);margin-bottom:14px;line-height:1.5}
+.nl-input{width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--bright);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:8px}
+.nl-input:focus{border-color:var(--blue)}
+.nl-btn{width:100%;padding:10px;border-radius:8px;background:var(--blue);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.nl-btn:hover{background:#2563eb}
+
+/* Sidebar ad */
+.sidebar-ad{background:var(--surf);border:1px dashed var(--border);border-radius:14px;padding:16px;text-align:center;min-height:250px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+
+/* Tags cloud */
+.tags-cloud{display:flex;flex-wrap:wrap;gap:6px}
+.tag-cloud-item{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;background:var(--surf2);border:1px solid var(--border);color:var(--text);cursor:pointer;transition:all .15s}
+.tag-cloud-item:hover{border-color:var(--blue);color:var(--blue)}
+
+/* Pagination */
+.pagination{display:flex;justify-content:center;gap:6px;margin-top:28px}
+.page-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surf);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'DM Sans',sans-serif}
+.page-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.page-btn:hover:not(.active){border-color:var(--blue);color:var(--bright)}
+
+@media(max-width:900px){.blog-layout{grid-template-columns:1fr}.sidebar{display:none}.featured-post{grid-template-columns:1fr}.featured-thumb{height:160px}}
+@media(max-width:600px){nav{padding:0 16px}.page{padding:24px 14px 60px}.post-card{grid-template-columns:80px 1fr}.post-thumb{font-size:24px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="playx.html" class="nav-logo">Play<span>x</span></a>
+  <a href="playx.html" class="nav-back">← Home</a>
+</nav>
+
+<div class="page">
+  <div class="page-eyebrow">📝 Playx Blog</div>
+  <div class="page-title">Game Tips & News</div>
+  <div class="page-sub">Guides, strategies, and everything gaming</div>
+
+  <!-- Top Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-label">Advertisement</div>
+    <!-- Google AdSense: replace with your ad code -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+    <div class="ad-placeholder">[ AdSense 728×90 Banner — Replace with your ad code ]</div>
+  </div>
+
+  <!-- Featured Post -->
+  <div class="featured-post" onclick="location.href='blog-post.html'">
+    <div class="featured-thumb">
+      🏃
+      <div class="featured-badge">🔥 Featured</div>
+    </div>
+    <div class="featured-body">
+      <div class="post-category">🎮 Game Guide</div>
+      <div class="featured-title">10 Tips to Score 1000+ in Shadow Runner</div>
+      <p class="post-excerpt">Most players hit a wall around 400 points. Here's exactly what separates the top 1% — from obstacle timing to the perfect slide technique that most players never discover.</p>
+      <div class="post-meta">
+        <div class="post-author">
+          <div class="post-avatar">P</div>
+          Playx Team
+        </div>
+        <span class="read-time">5 min read</span>
+        <span>June 14, 2026</span>
+      </div>
+      <div class="read-more">Read Article →</div>
+    </div>
+  </div>
+
+  <!-- Main layout -->
+  <div class="blog-layout">
+    <div>
+      <!-- Category pills -->
+      <div style="margin-bottom:20px">
+        <div class="category-pills">
+          <button class="cat-pill active" data-cat="all">All</button>
+          <button class="cat-pill" data-cat="guide">🎮 Guides</button>
+          <button class="cat-pill" data-cat="tips">💡 Tips</button>
+          <button class="cat-pill" data-cat="news">📰 News</button>
+          <button class="cat-pill" data-cat="quiz">🧠 Quiz</button>
+        </div>
+      </div>
+
+      <!-- Mid Ad -->
+      <div class="ad-banner" style="margin-bottom:20px;min-height:90px">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-placeholder">[ AdSense 728×90 — Replace with your ad code ]</div>
+      </div>
+
+      <!-- Posts -->
+      <div class="posts-grid" id="posts-grid"></div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">→</button>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Ad -->
+      <div class="sidebar-ad">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-placeholder">[ AdSense 300×250 ]</div>
+      </div>
+
+      <!-- Trending -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">🔥 Trending This Week</div>
+        <div class="trending-list">
+          <div class="trend-item"><div class="trend-num">01</div><div><div class="trend-title">10 Tips to Score 1000+ in Shadow Runner</div><div class="trend-reads">12.4K reads</div></div></div>
+          <div class="trend-item"><div class="trend-num">02</div><div><div class="trend-title">Word Blitz Strategy: How to Win in 3 Guesses</div><div class="trend-reads">8.7K reads</div></div></div>
+          <div class="trend-item"><div class="trend-num">03</div><div><div class="trend-title">What Your Gamer Type Says About You</div><div class="trend-reads">6.2K reads</div></div></div>
+          <div class="trend-item"><div class="trend-num">04</div><div><div class="trend-title">The Psychology Behind Daily Game Habits</div><div class="trend-reads">4.1K reads</div></div></div>
+          <div class="trend-item"><div class="trend-num">05</div><div><div class="trend-title">Best Free Browser Games of 2026</div><div class="trend-reads">3.8K reads</div></div></div>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="newsletter-card">
+        <div class="nl-icon">📬</div>
+        <div class="nl-title">Weekly Game Tips</div>
+        <div class="nl-sub">Get the best strategies and new game alerts every Monday.</div>
+        <input class="nl-input" type="email" placeholder="your@email.com" id="nl-email">
+        <button class="nl-btn" onclick="subscribe()">Subscribe Free →</button>
+      </div>
+
+      <!-- Tags -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">🏷 Topics</div>
+        <div class="tags-cloud">
+          <span class="tag-cloud-item">Shadow Runner</span>
+          <span class="tag-cloud-item">Word Blitz</span>
+          <span class="tag-cloud-item">Strategy</span>
+          <span class="tag-cloud-item">Beginner Guide</span>
+          <span class="tag-cloud-item">High Score</span>
+          <span class="tag-cloud-item">Daily Challenge</span>
+          <span class="tag-cloud-item">Quiz Tips</span>
+          <span class="tag-cloud-item">Gaming News</span>
+          <span class="tag-cloud-item">Puzzle Games</span>
+          <span class="tag-cloud-item">Leaderboard</span>
+        </div>
+      </div>
+
+      <!-- Second Sidebar Ad -->
+      <div class="sidebar-ad" style="min-height:250px">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-placeholder">[ AdSense 300×250 ]</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="sounds.js"></script>
+<script src="analytics.js"></script>
+<script src="xp.js"></script>
+<script src="profilebar.js"></script>
+<script src="supabase.js"></script>
+<script src="auth-ui.js"></script>
+<script src="seo-pwa.js"></script>
+<script>
+const POSTS = [
+  {icon:'🎯',title:'Word Blitz Strategy: How to Win in 3 Guesses',excerpt:'The secret isn\'t vocabulary — it\'s your opening word. We analyzed 500K games to find the statistically perfect starting words.',tag:'tips',tagLabel:'Tips',cat:'tips',date:'Jun 13, 2026',read:'4 min',views:'8.7K'},
+  {icon:'🧠',title:'What Your Gamer Type Says About You (Backed by Science)',excerpt:'We matched our quiz results with real personality psychology. The Completionist-Introvert link is surprisingly strong.',tag:'quiz',tagLabel:'Quiz',cat:'quiz',date:'Jun 12, 2026',read:'6 min',views:'6.2K'},
+  {icon:'📱',title:'5 Browser Games That Are Better Than Mobile Apps',excerpt:'No install, no storage, no ads — just pure gameplay. These titles prove the browser is the best gaming platform.',tag:'guide',tagLabel:'Guide',cat:'guide',date:'Jun 11, 2026',read:'3 min',views:'5.1K'},
+  {icon:'🏆',title:'How the Playx Leaderboard Algorithm Works',excerpt:'Not all scores are equal. Here\'s how we weight daily challenges, streaks, and consistency to rank global players.',tag:'news',tagLabel:'News',cat:'news',date:'Jun 10, 2026',read:'4 min',views:'3.4K'},
+  {icon:'⚡',title:'The Psychology of the Daily Streak (Why You Can\'t Stop)',excerpt:'Game designers call it the "variable reward loop." Scientists call it habit formation. We call it Word Blitz addiction.',tag:'tips',tagLabel:'Tips',cat:'tips',date:'Jun 9, 2026',read:'5 min',views:'4.8K'},
+  {icon:'🎮',title:'Best Free Puzzle Games to Play at Work (Without Getting Caught)',excerpt:'Short sessions, no sound required, and plausibly look like spreadsheets. The ultimate guide to stealth gaming.',tag:'guide',tagLabel:'Guide',cat:'guide',date:'Jun 8, 2026',read:'3 min',views:'9.1K'},
+  {icon:'🌍',title:'New Game Alert: Geo Blitz — Test Your World Knowledge',excerpt:'Can you name 20 world capitals in 60 seconds? Our new geography challenge is live and it\'s harder than you think.',tag:'news',tagLabel:'News',cat:'news',date:'Jun 7, 2026',read:'2 min',views:'2.9K'},
+  {icon:'💎',title:'How to Reach Level 10 (Mythic) Faster',excerpt:'Most players take 30 days. The top 1% do it in 8. Here\'s the exact XP optimization strategy they use.',tag:'tips',tagLabel:'Tips',cat:'tips',date:'Jun 6, 2026',read:'5 min',views:'7.3K'},
+];
+
+const TAG_CLASSES = {tips:'tag-tips',guide:'tag-guide',news:'tag-news',quiz:'tag-quiz'};
+let activeCat = 'all';
+
+function renderPosts() {
+  const list = activeCat === 'all' ? POSTS : POSTS.filter(p => p.cat === activeCat);
+  document.getElementById('posts-grid').innerHTML = list.map(p => `
+    <div class="post-card" onclick="location.href='blog-post.html'">
+      <div class="post-thumb">${p.icon}</div>
+      <div class="post-body">
+        <div class="post-card-title">${p.title}</div>
+        <div class="post-card-excerpt">${p.excerpt}</div>
+        <div class="post-card-meta">
+          <span class="post-tag ${TAG_CLASSES[p.tag]}">${p.tagLabel}</span>
+          <span>${p.read} read</span>
+          <span>${p.views} views</span>
+          <span>${p.date}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.querySelectorAll('.cat-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    renderPosts();
+  });
+});
+
+function subscribe() {
+  const email = document.getElementById('nl-email').value;
+  if (!email.includes('@')) { alert('Please enter a valid email'); return; }
+  document.getElementById('nl-email').value = '';
+  showXPToast?.(20, 'Subscribed!', 'Weekly tips coming to your inbox 📬', '📬');
+}
+
+renderPosts();
+</script>
+<script src="ads.js"></script>
+</body>
+</html>

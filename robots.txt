@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://playx.io/sitemap.xml
+
+# Disallow private/config files
+Disallow: /supabase.js
+Disallow: /sw.js
